@@ -17,8 +17,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ListController extends AbstractController
 {
+
     /**
-     * @Route("/task", name="app_show_tasks")
+     * @Route("/", name="app_homepage")
      */
     public function show(TaskRepository $repository){
 
@@ -32,17 +33,10 @@ class ListController extends AbstractController
     }
 
     /**
-     * @Route("task/form", name="app_form_add")
+     * @Route("/new", name="app_show_tasks")
      */
-    public function form(){
-        return $this->render('list/form.html.twig');
-    }
-
-    /**
-     * @Route("task/form/new", name="app_form_add_new")
-     */
-    public function new(Request $request): Response{
-
+    public function new(EntityManagerInterface $entityManager, Request $request ): Response{
+/*
         $task = new Task();
         $task->setName('Do task list')
             ->setSlug('do-task-list'.rand(1,1000))
@@ -64,7 +58,31 @@ EOF
             ->add('save', SubmitType::class, ['label' => 'Create Task'])
             ->getForm();
 */
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskType::class);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //dd($form->getData());
+            $task = $form->getData();
+            //$task = new Task();
+
+
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_homepage");
+        }
+
+        //handle the form
+        //$form->handleRequest($request);
+        /*if($form->isSubmitted() && $form->isValid()){
+            $task=$form->getData();
+           // dd($form->getData());
+
+
+            return $this->redirectToRoute('app_homepage', [], 301);
+        }*/
+
 
         return $this->render('list/form.html.twig', [
             'form' => $form->createView(),

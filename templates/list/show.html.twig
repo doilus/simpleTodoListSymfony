@@ -4,12 +4,12 @@
     <div>
         {% for task in tasks %}
         <h1> {{ task.name }}</h1>
-        <h2> {{ task.slug }}</h2>
+        <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
         <h3> {{ task.dueDate|date('Y-m-d') }}</h3>
-        <h3> {{ task.task }}</h3>
+        <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
 
         {% endfor %}
-        <form action="{{ path('app_form_add') }}" >
+        <form action="{{ path('app_show_tasks' ) }}" >
             <button class="btn add-task">Add new task</button>
         </form>
 
