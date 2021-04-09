@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class ListController extends AbstractController
 {
@@ -23,7 +25,7 @@ class ListController extends AbstractController
     public function show(TaskRepository $repository){
 
         //odczytanie rekordow
-        $tasks = $repository->findAll();
+        $tasks = $repository->findBy(array('user' => $this->getUser()));
 
         return $this->render('list/show.html.twig', [
             'tasks' => $tasks,
@@ -34,7 +36,7 @@ class ListController extends AbstractController
     /**
      * @Route("/new", name="app_show_tasks")
      */
-    public function new(EntityManagerInterface $entityManager, Request $request ): Response{
+    public function new(EntityManagerInterface $entityManager, Request $request): Response{
 /*
         $task = new Task();
         $task->setName('Do task list')
@@ -64,7 +66,7 @@ EOF
             //dd($form->getData());
             $task = $form->getData();
             //$task = new Task();
-
+            $task->setUser($this->getUser());   //security -->pobieram
 
             $entityManager->persist($task);
             $entityManager->flush();
