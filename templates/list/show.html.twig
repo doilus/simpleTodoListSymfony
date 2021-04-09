@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
+
 {% block body %}
     <div>
+        {% if app.user %}
         <h1> To do list </h1>
         <h2> Current </h2>
         {% for task in tasks %}
@@ -24,7 +26,7 @@
                 <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
             {% endif %}
         {% endfor %}
-        {% if is_granted('ROLE_USER') %}
+
         <form action="{{ path('app_show_tasks' ) }}" >
             <button class="btn add-task">Add new task</button>
         </form>

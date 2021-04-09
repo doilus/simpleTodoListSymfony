@@ -20,6 +20,7 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+    /*
     public function findAllTaskUser(User $user): \Doctrine\ORM\QueryBuilder
     {
 
@@ -29,7 +30,7 @@ class TaskRepository extends ServiceEntityRepository
             ->andWhere('t.user = :id')
             ->setParameter('id', $user->getId())
             ;
-    }
+    }*/
     // /**
     //  * @return Task[] Returns an array of Task objects
     //  */

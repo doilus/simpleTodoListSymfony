@@ -23,6 +23,7 @@ class TaskType extends AbstractType
             ->add('slug')
             ->add('task')
             ->add('dueDate')
+            ->add('isDone')
             ->add('save', SubmitType::class, ['label' => 'Add task'])
             ;
     }

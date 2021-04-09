@@ -43,6 +43,11 @@ class Task
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDone;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class Task
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getIsDone(): ?bool
+    {
+        return $this->isDone;
+    }
+
+    public function setIsDone(bool $isDone): self
+    {
+        $this->isDone = $isDone;
 
         return $this;
     }
