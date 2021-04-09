@@ -3,12 +3,26 @@
 {% block body %}
     <div>
         <h1> To do list </h1>
+        <h2> Current </h2>
         {% for task in tasks %}
-        <h1> {{ task.name }}</h1>
-        <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
-        <h3> {{ task.dueDate|date('Y-m-d') }}</h3>
-        <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
+            {% if task.dueDate >= dateNow %}
+                <h3> {{ task.name }}</h3>
+                <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
 
+                <h4> {{ task.dueDate|date('Y-m-d') }}</h4>
+                <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
+            {% endif %}
+        {% endfor %}
+
+        <h2> Outdated </h2>
+        {% for task in tasks %}
+            {% if task.dueDate < dateNow %}
+                <h3> {{ task.name }}</h3>
+                <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
+
+                <h4> {{ task.dueDate|date('Y-m-d') }}</h4>
+                <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
+            {% endif %}
         {% endfor %}
         {% if is_granted('ROLE_USER') %}
         <form action="{{ path('app_show_tasks' ) }}" >

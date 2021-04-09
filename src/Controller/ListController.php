@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ListController extends AbstractController
 {
@@ -24,13 +25,16 @@ class ListController extends AbstractController
      */
     public function show(TaskRepository $repository){
 
+        $now = new \DateTime;
         //odczytanie rekordow
-        $tasks = $repository->findBy(array('user' => $this->getUser()));
+        $tasks = $repository->findBy(array('user' => $this->getUser()), array('dueDate' => 'ASC'));
 
-        return $this->render('list/show.html.twig', [
+
+        return $this->render('list/show.html.twig',  [
             'tasks' => $tasks,
-
+            'dateNow' => $now,
         ]);
+
     }
 
     /**
