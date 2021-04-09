@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ListController extends AbstractController
 {
-
     /**
      * @Route("/", name="app_homepage")
      */
