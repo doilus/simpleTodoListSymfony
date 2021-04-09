@@ -2,6 +2,7 @@
 
 {% block body %}
     <div>
+        <h1> To do list </h1>
         {% for task in tasks %}
         <h1> {{ task.name }}</h1>
         <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
@@ -9,9 +10,10 @@
         <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
 
         {% endfor %}
+        {% if is_granted('ROLE_USER') %}
         <form action="{{ path('app_show_tasks' ) }}" >
             <button class="btn add-task">Add new task</button>
         </form>
-
+        {% endif %}
     </div>
 {% endblock %}
