@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div>
+        {% if app.user %}
+            <h1> To do list </h1>
+            <table>
+                <tr>
+                    <th> Name </th>
+                    <th> Due Date </th>
+                    <th> Date Status </th>
+                    <th> Status </th>
+                    <th> Options </th>
+                </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td> {{ task.name }}</td>
+                    <td> {{ task.dueDate|date('Y-m-d') }}</td>
+                    {% if task.dueDate < dateNow %}
+                        <td> Outdated </td>
+                    {% else %}
+                        <td> Current </td>
+                    {% endif %}
+                    {% if  task.isDone  != 0 %}
+                        <td>
+                            <span class="fa fa-check-square" style="color:greenyellow"> wykonane</span>
+                        </td>
+                    {% else %}
+                        <td>
+                        <span class="fa fa-check-square" style="color:red"> NIE wykonane</span>
+                        </td>
+                    {% endif %}
+                    <td>
+                        <div class="options">
+                            <a href="{{ path('app_edit_task', { id: task.id }) }}">
+                                <span class="fa fa-pencil-alt"></span>
+                            </a>
+                            <a href="{{ path('app_delete_task', { id: task.id }) }}">
+                                <span class="fa fa-trash"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+
+            <form action="{{ path('app_add_task' ) }}" >
+                <button class="btn add-task">Add new task</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

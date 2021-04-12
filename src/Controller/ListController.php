@@ -72,7 +72,7 @@ class ListController extends AbstractController
         $tasks = $this->repository->findBy(['user' => $this->getUser()], ['dueDate' => 'ASC']);
 
 
-        return $this->render('list/show.html.twig',  [
+        return $this->render('list/show_table.html.twig',  [
             'tasks' => $tasks,
             'dateNow' => $now,
         ]);
