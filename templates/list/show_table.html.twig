@@ -5,6 +5,21 @@
     <div>
         {% if app.user %}
             <h1> To do list </h1>
+            {% if taskSoon is not empty %}
+            <h2> Reminders: </h2>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                    </tr>
+                {% for task in taskSoon %}
+                    <tr>
+                        <th> {{ task.name }}</th>
+                        <th> {{ task.dueDate|date('Y-m-d') }}</th>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
             <table>
                 <tr>
                     <th> Name </th>
@@ -33,10 +48,10 @@
                     {% endif %}
                     <td>
                         <div class="options">
-                            <a href="{{ path('app_edit_task', { id: task.id }) }}">
+                            <a style="text-decoration: none" href="{{ path('app_edit_task', { id: task.id }) }}">
                                 <span class="fa fa-pencil-alt"></span>
                             </a>
-                            <a href="{{ path('app_delete_task', { id: task.id }) }}">
+                            <a style="text-decoration: none" href="{{ path('app_delete_task', { id: task.id }) }}">
                                 <span class="fa fa-trash"></span>
                             </a>
                         </div>
@@ -44,7 +59,6 @@
                 </tr>
             {% endfor %}
             </table>
-
             <form action="{{ path('app_add_task' ) }}" >
                 <button class="btn add-task">Add new task</button>
             </form>
