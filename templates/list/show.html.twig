@@ -20,6 +20,7 @@
         {% for task in tasks %}
             {% if task.dueDate < dateNow %}
                 <h3> {{ task.name }}</h3>
+                <a class="check-done" href="#"><i class="fa "</a>
                 <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
 
                 <h4> {{ task.dueDate|date('Y-m-d') }}</h4>
@@ -27,7 +28,7 @@
             {% endif %}
         {% endfor %}
 
-        <form action="{{ path('app_show_tasks' ) }}" >
+        <form action="{{ path('app_task' ) }}" >
             <button class="btn add-task">Add new task</button>
         </form>
         {% endif %}

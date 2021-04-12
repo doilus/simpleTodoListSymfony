@@ -20,6 +20,12 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+    public function save(Task $task){
+        $this->_em->persist($task);
+        $this->_em->flush();
+
+    }
+
     /*
     public function findAllTaskUser(User $user): \Doctrine\ORM\QueryBuilder
     {
