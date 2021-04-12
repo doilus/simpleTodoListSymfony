@@ -23,8 +23,15 @@ class ListController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
+    public function homepage(){
+        return $this->render('base.html.twig');
+    }
+    /**
+     * @Route("/task", name="app_task")
+     */
     public function show(TaskRepository $repository){
 
+        // $this->denyAccessUnlessGranted('ROLE_USER'); // <--- also to prevent unlogged user from access (security.yaml)
         $now = new \DateTime;
         //odczytanie rekordow
         $tasks = $repository->findBy(array('user' => $this->getUser()), array('dueDate' => 'ASC'));
@@ -38,38 +45,18 @@ class ListController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_show_tasks")
+     * @Route("/task/new", name="app_add_task")
      */
     public function new(EntityManagerInterface $entityManager, Request $request): Response{
-/*
-        $task = new Task();
-        $task->setName('Do task list')
-            ->setSlug('do-task-list'.rand(1,1000))
-            ->setTask(<<<EOF
-potrzebuję programu, który pozwoli mi wpisać rzeczy, które mam wykonać i do kiedy mam je wykonać.
-Chciałbym także zobaczyć w aplikacji zadania, których czas już minął.
-Przydałoby się także abym moi przyjaciele mogli także korzystać z aplikacji a co za tym idzie aby mogli założyć sobie konto.
-Jednak mimo, że jesteśmy paczką przyjaciół to jednak żaden z nas nie chciałby aby ktoś inny widział nasze zadania, proszę wziąć to pod uwagę.
-EOF
-)
-            ->setDueDate(new \DateTime((sprintf('-%d days',rand(1,100)))));
-        /*
-        //dodanie
-        $form = $this->createFormBuilder($task)
-            ->add('name', TextType::class)
-            ->add('slug', TextType::class)
-            ->add('task', TextType::class)
-            ->add('dueDate', DateType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
-            ->getForm();
-*/
+
         $form = $this->createForm(TaskType::class);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             //dd($form->getData());
             $task = $form->getData();
-            //$task = new Task();
+
+
             $task->setUser($this->getUser());   //security -->pobieram
 
             $entityManager->persist($task);
@@ -78,29 +65,11 @@ EOF
             return $this->redirectToRoute("app_homepage");
         }
 
-        //handle the form
-        //$form->handleRequest($request);
-        /*if($form->isSubmitted() && $form->isValid()){
-            $task=$form->getData();
-           // dd($form->getData());
-
-
-            return $this->redirectToRoute('app_homepage', [], 301);
-        }*/
 
 
         return $this->render('list/form.html.twig', [
             'form' => $form->createView(),
         ]);
 
-        //should be redirect
-        //return $this->redirectToRoute('app_show_tasks');
-        /*
-        return new Response(sprintf(
-           'You did it! Added new task id: #%d, name: %s',
-           $task->getId(),
-           $task->getName()
-        ));
-        */
     }
 }
