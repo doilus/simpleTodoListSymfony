@@ -10,6 +10,8 @@ use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,16 +87,43 @@ class ListController extends AbstractController
 
             $this->repository->save($task);
 
+            //$this->addFlash('success', 'Task was created!');
 
 
-            return $this->redirectToRoute("app_homepage");
+            return $this->redirectToRoute("app_task");
         }
 
 
 
-        return $this->render('list/form.html.twig', [
+        return $this->render('list/new_form.html.twig', [
             'form' => $form->createView(),
         ]);
 
     }
+
+    /**
+     * @param Task $task
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @Route("/task/{id}/edit", name="app_edit_task")
+     */
+    public function edit(Task $task, Request $request){
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $task = $form->getData();
+
+            $this->repository->save($task);
+
+            //$this->addFlash('success', 'Task was updated!');
+
+            return $this->redirectToRoute("app_task");
+        }
+
+        return $this->render('list/edit_form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Add new task</h1>
+    <h1> {{ title }} </h1>
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <buton type="submit" class="btn btn-primary"></buton>
+        <button type="submit" class="btn btn-primary">{{ button_text }}</button>
     {{ form_end(form) }}
 {% endblock %}

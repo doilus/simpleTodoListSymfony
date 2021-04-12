@@ -24,7 +24,7 @@ class TaskType extends AbstractType
             ->add('task')
             ->add('dueDate')
             ->add('isDone')
-            ->add('save', SubmitType::class, ['label' => 'Add task'])
+
             ;
     }
     public function configureOptions(OptionsResolver $resolver): void

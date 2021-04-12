@@ -26,6 +26,11 @@ class TaskRepository extends ServiceEntityRepository
 
     }
 
+    public function update(Task $task){
+        $this->_em->persist($task);
+        $this->_em->flush();
+    }
+
     /*
     public function findAllTaskUser(User $user): \Doctrine\ORM\QueryBuilder
     {
