@@ -50,7 +50,16 @@ class ListController extends AbstractController
      * @Route("/", name="app_homepage")
      */
     public function homepage(){
-        return $this->render('base.html.twig');
+
+        $user = $this->getUser();
+        if($user === null){
+            $userName = 'annonymus';
+        }else{
+            $userName = $user->getUsername();
+        }
+        return $this->render('general/homepage.html.twig', [
+            'userName' => $userName
+        ]);
     }
     /**
      * @Route("/task", name="app_task")
@@ -124,6 +133,21 @@ class ListController extends AbstractController
         return $this->render('list/edit_form.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Task $task
+     * @param Request $request
+     * @Route("/task/{id}/delete", name="app_delete_task")
+     */
+    public function delete(Task $task, Request $request){
+
+        //throw
+
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute("app_task");
     }
 
 }

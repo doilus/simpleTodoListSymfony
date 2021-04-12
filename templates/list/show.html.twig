@@ -20,12 +20,10 @@
         {% for task in tasks %}
             {% if task.dueDate < dateNow %}
                 <div class="check-task check-task-alt">
-
                     <h3> {{ task.name }}</h3>
                     <!-- dont want to show slug <h2> {{ task.slug }}</h2> -->
                     <h4> {{ task.dueDate|date('Y-m-d') }}</h4>
                     <!-- dnt want to show description <h3> {{ task.task }}</h3> -->
-
                     {% if  task.isDone  != 0 %}
                         <a class="check-done" href="#"><i class="fa fa-check-square" style="color:greenyellow"></i></a>
                         <h5> wykonane </h5>
@@ -33,7 +31,12 @@
                         <a class="check-done" href="#"><i class="fa fa-check-square" style="color:red"></i></a>
                         <h5> NIE wykonane </h5>
                     {% endif %}
-                    <h5> {{ task.slug }}</h5>
+                    <a href="{{ path('app_edit_task', { id: task.id }) }}">
+                        <span class="fa fa-pencil-alt"></span>
+                    </a>
+                    <a href="{{ path('app_delete_task', { id: task.id }) }}">
+                        <span class="fa fa-trash"></span>
+                    </a>
                 </div>
             {% endif %}
         {% endfor %}
