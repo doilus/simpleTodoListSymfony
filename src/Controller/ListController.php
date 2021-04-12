@@ -75,8 +75,11 @@ class ListController extends AbstractController
         //podkreślenie tasków, które kończą się za min. 3 dni
         $tasksSoon = array();
         for($i = 0; $i < count($tasks) ; $i++ ){
-            if($tasks[$i]->getDueDate()->diff($now)->d <= 3 and $tasks[$i]->getDueDate()->diff($now)->d >= 0  ){
+            $days = $tasks[$i]->getDueDate()->diff($now)->d;
+            if($days <= 3 and $days  >= 0  ){
                 array_push($tasksSoon, $tasks[$i]);
+                //array_push($tasksSoon, $days);
+                //spr rozwiązać to za pomocą mapy
             }
         }
 
