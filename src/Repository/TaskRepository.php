@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Task;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method Task|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,6 +29,26 @@ class TaskRepository extends ServiceEntityRepository
     public function update(Task $task){
         $this->_em->persist($task);
         $this->_em->flush();
+    }
+
+    public function writeToCSV()
+    {
+        //$rows = [];
+        $tasks = $this->findAll();
+
+        $fp =fopen("sample.csv", "w");
+        foreach ($tasks as $task){
+            $data = [$task->getId(), $task->getName(), $task->getSlug(), $task->getDueDate()->format('Y-m-d H:i:s'), $task->getUser()->getId(), $task->getIsDone(), $task->getTask()];
+            //$rows[] = implode(',', $data);
+            fputcsv($fp, $data, ',' );
+        }
+
+        fclose($fp);
+        /*$content = implode('\n', $rows);
+        $response = new Response($content);
+        $response->headers->set("Content-Type", "text/csv");
+
+        return $content;*/
     }
 
     /*
