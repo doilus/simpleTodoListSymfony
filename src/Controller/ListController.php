@@ -54,7 +54,7 @@ class ListController extends AbstractController
 
         $user = $this->getUser();
         if($user === null){
-            $userName = 'annonymus';
+            $userName = 'Anonymous';
         }else{
             $userName = $user->getUsername();
         }

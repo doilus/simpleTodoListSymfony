@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
 
             $mailer->send($email);
 
-            return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [
