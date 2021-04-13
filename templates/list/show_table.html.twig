@@ -2,10 +2,11 @@
 
 
 {% block body %}
-    <div>
+    <div class="container">
         {% if app.user %}
             <h1> To do list </h1>
             {% if taskSoon is not empty %}
+                <div class="reminder">
             <h2> Reminders: </h2>
                 <table>
                     <tr>
@@ -14,13 +15,14 @@
                     </tr>
                 {% for task in taskSoon %}
                     <tr>
-                        <th> {{ task.name }}</th>
-                        <th> {{ task.dueDate|date('Y-m-d') }}</th>
+                        <td> {{ task.name }}</td>
+                        <td> {{ task.dueDate|date('Y-m-d') }}</td>
                     </tr>
                 {% endfor %}
                 </table>
             {% endif %}
-            <table>
+            </div >
+            <table class="taskTable">
                 <tr>
                     <th> Name </th>
                     <th> Due Date </th>
@@ -39,11 +41,11 @@
                     {% endif %}
                     {% if  task.isDone  != 0 %}
                         <td>
-                            <span class="fa fa-check-square" style="color:greenyellow"> wykonane</span>
+                            <span class="fa fa-check-square" style="color:greenyellow"></span>
                         </td>
                     {% else %}
                         <td>
-                        <span class="fa fa-check-square" style="color:red"> NIE wykonane</span>
+                        <span class="fa fa-check-square" style="color:red"></span>
                         </td>
                     {% endif %}
                     <td>
@@ -59,8 +61,8 @@
                 </tr>
             {% endfor %}
             </table>
-            <form action="{{ path('app_add_task' ) }}" >
-                <button class="btn add-task">Add new task</button>
+            <form class="buttonAdd"action="{{ path('app_add_task' ) }}" >
+                <button class="add-task">Add new task</button>
             </form>
         {% endif %}
     </div>

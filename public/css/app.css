@@ -1,0 +1,101 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container .buttons{
+    padding: 20px;
+
+}
+
+.container .buttons a,
+.container .buttonAdd .add-task{
+    background-color: cornflowerblue;
+    color: white;
+    padding: 1em 1.5em ;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    border: none;
+
+}
+.container .buttons a:hover,
+.container .buttonAdd .add-task:hover{
+    opacity: 50%;
+}
+
+.container h1 {
+    color: slateblue;
+    font-size: 50px;
+    margin: 10px;
+}
+.container .reminder h2 {
+    color: #db1b1b;
+    text-align: center;
+    margin-bottom: 12px;
+}
+.container .reminder table,
+.container .taskTable{
+   margin: 10px;
+}
+.container .reminder table,
+.container .reminder table th,
+.container .reminder table td{
+    padding: 5px;
+    padding-inline: 15px;
+}
+.container .reminder table th{
+    color: white;
+    background-color: #B0413E;
+    text-align: center;
+}
+.container .reminder table tr:nth-child(even){
+    background-color: #f3acac;
+}
+.container .taskTable,
+.container .taskTable th,
+.container .taskTable td{
+    padding: 10px;
+    padding-inline: 30px;
+    text-align: center;
+}
+.container .taskTable th{
+    color: white;
+    background-color: #8ab0ef;
+}
+.container .taskTable tr:nth-child(even){
+    background-color: #eff9fd;
+}
+
+.container .taskTable  tr td .options{
+    display: grid;
+    grid-template-columns: auto auto;
+    text-decoration: none;
+    color: darkblue;
+}
+.container .taskTable  tr td .options a:hover{
+    opacity: 50%;
+}
+
+
+.mb-3 {
+    color: dodgerblue;
+}
+.mb-3 span{
+    color: darkblue;
+    font-weight: bold;
+    padding: 0.5em 0.5em;
+    background-color: #a3c0ec;
+}
+.mb-3 a {
+    text-decoration: none;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 0.5em ;
+}
+.mb-3 a:hover{
+    opacity: 50%;
+}
