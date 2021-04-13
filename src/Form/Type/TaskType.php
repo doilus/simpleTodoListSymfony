@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class TaskType extends AbstractType
 {
@@ -22,7 +23,7 @@ class TaskType extends AbstractType
             ->add('name')
             ->add('slug')
             ->add('task')
-            ->add('dueDate')
+            ->add('dueDate', DateType::class)
             ->add('isDone')
 
             ;
