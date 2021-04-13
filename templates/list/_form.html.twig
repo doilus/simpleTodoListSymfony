@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1> {{ title }} </h1>
+    <div class="taskAddForm">
+    <h1 class="h3 mb-3 font-weight-normal"> {{ title }} </h1>
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+        <a href="{{ path('app_task') }}">
+            <span class="btnCancel"> Cancel </span>
+        </a>
     {{ form_end(form) }}
+    </div>
 {% endblock %}

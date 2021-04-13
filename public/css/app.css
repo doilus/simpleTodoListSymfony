@@ -14,21 +14,29 @@
 .container .buttons a,
 .container .buttonAdd .add-task,
 .loginForm button,
-.registerForm button{
+.registerForm button,
+.taskAddForm form button,
+.taskAddForm form a span,
+.resetPassword p a{
     background-color: cornflowerblue;
     color: white;
-    padding: 1em 1.5em ;
+    padding: 1em 1.5em;
     text-decoration: none;
     text-transform: uppercase;
     display: inline-block;
     border: none;
-
 }
 .container .buttons a:hover,
 .container .buttonAdd .add-task:hover,
 .loginForm button:hover,
-.registerForm button:hover{
+.registerForm button:hover,
+.taskAddForm form button:hover,
+.taskAddForm form a span:hover,
+.resetPassword p a:hover{
     opacity: 50%;
+}
+.taskAddForm form a .btnCancel{
+    background-color: #264459;
 }
 
 .container h1 {
@@ -107,34 +115,58 @@
 .loginForm,
 .registerForm form div,
 .registerForm h1,
-.registerForm form .btn{
+.registerForm form .btn,
+.taskAddForm form div div,
+.taskAddForm h1,
+.taskAddForm form button,
+.taskAddForm form a{
    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.registerForm form .btn{
+.registerForm form .btn,
+.taskAddForm form button,
+.taskAddForm form a{
     margin-right: auto;
     margin-left: auto;
 }
 
-input{
+input,
+textarea{
     display: block;
     width: 40%;
     padding:10px;
     border-radius: 10px;
     border:1px solid #5eb5e0;
 }
-input:hover{
+input:hover,
+textarea:hover{
     border: 1px solid #226985;
 }
+.taskAddForm form div div div{
+    display: grid;
+    grid-template-columns: auto auto auto;
+
+}
+.taskAddForm form div div select{
+    padding: 10px;
+    margin-inline: 5px;
+}
 .loginForm label,
-.registerForm form div label{
+.registerForm form div label,
+.taskAddForm form div label{
     padding: 10px;
 }
 .loginForm button,
-.registerForm button{
+.registerForm button,
+.taskAddForm form button,
+.taskAddForm form a span,
+.resetPassword p a{
     margin-top: 20px;
+}
+.taskAddForm form a{
+    text-decoration: none;
 }
 .loginForm a{
     text-decoration: none;
@@ -142,4 +174,8 @@ input:hover{
 }
 .loginForm a:hover{
     opacity: 50%;
+}
+.resetPassword p{
+    text-align: center;
+    color: #2c6988;
 }
