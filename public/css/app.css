@@ -12,7 +12,9 @@
 }
 
 .container .buttons a,
-.container .buttonAdd .add-task{
+.container .buttonAdd .add-task,
+.loginForm button,
+.registerForm button{
     background-color: cornflowerblue;
     color: white;
     padding: 1em 1.5em ;
@@ -23,7 +25,9 @@
 
 }
 .container .buttons a:hover,
-.container .buttonAdd .add-task:hover{
+.container .buttonAdd .add-task:hover,
+.loginForm button:hover,
+.registerForm button:hover{
     opacity: 50%;
 }
 
@@ -97,5 +101,45 @@
     padding: 0.5em ;
 }
 .mb-3 a:hover{
+    opacity: 50%;
+}
+
+.loginForm,
+.registerForm form div,
+.registerForm h1,
+.registerForm form .btn{
+   display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.registerForm form .btn{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+input{
+    display: block;
+    width: 40%;
+    padding:10px;
+    border-radius: 10px;
+    border:1px solid #5eb5e0;
+}
+input:hover{
+    border: 1px solid #226985;
+}
+.loginForm label,
+.registerForm form div label{
+    padding: 10px;
+}
+.loginForm button,
+.registerForm button{
+    margin-top: 20px;
+}
+.loginForm a{
+    text-decoration: none;
+    color: #264459;
+}
+.loginForm a:hover{
     opacity: 50%;
 }
