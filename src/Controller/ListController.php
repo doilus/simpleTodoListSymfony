@@ -76,13 +76,12 @@ class ListController extends AbstractController
         $tasksSoon = array();
         for($i = 0; $i < count($tasks) ; $i++ ){
             $days = $tasks[$i]->getDueDate()->diff($now)->d;
-            if($days <= 3 and $days  >= 0  ){
+            if($days <= 3 and $days  >= 0 and $tasks[$i]->getDueDate()>$now){
                 array_push($tasksSoon, $tasks[$i]);
                 //array_push($tasksSoon, $days);
                 //spr rozwiązać to za pomocą mapy
             }
         }
-
 
 
         return $this->render('list/show_table.html.twig',  [
