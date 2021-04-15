@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
+use http\Encoding\Stream\Enbrotli;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -20,7 +21,7 @@ class Task
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -35,7 +36,7 @@ class Task
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $task;
+    private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
@@ -48,19 +49,36 @@ class Task
      */
     private $isDone;
 
+    public function __construct(
+        $title,
+        $slug,
+        $dueDate,
+        $description,
+        $user,
+        $isDone,
+    )
+    {
+        $this->title = $title;
+        $this->slug = $slug;
+        $this->dueDate = $dueDate;
+        $this->description = $description;
+        $this->user = $user;
+        $this->isDone = $isDone;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -89,14 +107,14 @@ class Task
         return $this;
     }
 
-    public function getTask(): ?string
+    public function getDescription(): ?string
     {
-        return $this->task;
+        return $this->description;
     }
 
-    public function setTask(?string $task): self
+    public function setDescription(?string $description): self
     {
-        $this->task = $task;
+        $this->description = $description;
 
         return $this;
     }
@@ -123,5 +141,22 @@ class Task
         $this->isDone = $isDone;
 
         return $this;
+    }
+
+    public function checkDateReminder() : bool{
+        $currentDate = new \DateTime;
+        $days = $this->getDueDate()->diff($currentDate)->d;
+        if($days <= 3 && $days  >= 0 && $this->getDueDate()>$currentDate){
+            return true;
+        }
+        return false;
+    }
+
+    public function isOutdated() : bool{
+        $currentDate = new \DateTime;
+        if($this->getDueDate() < $currentDate){
+            return true;
+        }
+        return false;
     }
 }

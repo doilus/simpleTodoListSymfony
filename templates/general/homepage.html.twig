@@ -3,23 +3,13 @@
 {% block body %}
     <div class="container">
         <h1> Hello {{ userName }}!</h1>
-
     <div class="buttons">
-        {% if app.user %}
-            <a href="{{ path('app_task') }}">
-                <span> Check your tasks </span>
-            </a>
-        {% else %}
         <a href="{{ path('app_login') }}">
             <span> Login </span>
         </a>
         <a href="{{ path('app_register') }}">
             <span> Register </span>
         </a>
-    {% endif %}
     </div>
     </div>
 {% endblock %}
- {% block javascripts %}
-     {#{{ encore_entry_script_tags('app') }}#}
- {% endblock %}

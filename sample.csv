@@ -1,5 +1,3 @@
-3,"do dishesddd",dd,"2017-03-04 00:00:00",1,,ddd
-7,"do sth",ssss,"2025-04-04 02:01:00",1,,sss
-8,"do dishes",rr,"2021-04-13 00:00:00",1,1,rrr
-9,ddd,ddd,"2019-04-04 00:00:00",1,,dddd
-11,"do sth more",more,"2021-04-16 00:00:00",1,,gfdg
+7,"do sth",ssss,"2025-04-04 02:01:00",1,False,sss
+8,"do dishes",rr,"2021-04-13 00:00:00",1,True,rrr
+11,"do sth more",more,"2021-04-16 00:00:00",1,True,gfdg

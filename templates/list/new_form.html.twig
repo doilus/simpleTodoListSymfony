@@ -1,4 +1,6 @@
 {% block body %}
+    {{ dump(app.flashes) }}
+
     {{ include('list/_form.html.twig', {
         button_text: 'Add  task',
         title: 'Add new task:'
