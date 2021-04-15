@@ -16,9 +16,10 @@
         <a href="{{ path('app_register') }}">
             <span> Register </span>
         </a>
-            </div>
-            </div>
     {% endif %}
-
+    </div>
+    </div>
 {% endblock %}
-
+ {% block javascripts %}
+     {#{{ encore_entry_script_tags('app') }}#}
+ {% endblock %}
