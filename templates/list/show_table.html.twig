@@ -20,9 +20,6 @@
                     </table>
                 </div>
                 {% endfor %}
-
-
-
             <table class="taskTable">
                 <tr>
                     <th> Name </th>
@@ -52,9 +49,13 @@
                             <a href="{{ path('app_edit_task', { id: task.id }) }}">
                                 <span class="fa fa-pencil-alt"></span>
                             </a>
-                            <a href="{{ path('app_delete_task', { id: task.id }) }}">
-                                <span class="fa fa-trash"></span>
-                            </a>
+                            <form method="post" action="{{ path('app_delete_task', { id: task.id }) }}"
+                               onsubmit="return confirm('{{  'Czy na pewno chcesz usunąć?'|trans }}');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
