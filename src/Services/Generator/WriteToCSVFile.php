@@ -24,12 +24,12 @@ class WriteToCSVFile
         foreach ($tasks as $task){
             $data = [
                 $task->getId(),
-                $task->getName(),
+                $task->getTitle(),
                 $task->getSlug(),
                 $task->getDueDate()->format('Y-m-d H:i:s'),
                 $task->getUser()->getId(),
                 $task->getIsDone() ? "True" : "False",
-                $task->getTask()];
+                $task->getDescription()];
             fputcsv($fp, $data, ',' );
         }
         fclose($fp);
