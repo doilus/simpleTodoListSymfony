@@ -69,8 +69,7 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/new", name="app_add_task", methods={"GET"})
-     * @Route("/task/new", name="app_add_task", methods={"POST"})
+     * @Route("/task/new", name="app_add_task", methods={"GET", "POST"})
      * @param Request $request
      * @return Response
      */
@@ -132,5 +131,7 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute("app_task");
     }
+
+
 
 }

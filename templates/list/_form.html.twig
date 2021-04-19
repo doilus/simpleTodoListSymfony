@@ -10,5 +10,11 @@
             <span class="btnCancel"> Cancel </span>
         </a>
     {{ form_end(form) }}
+
+        <form method="POST" action="{{ path("upload_image") }}" enctype="multipart/form-data">
+            <input type="file" name="image">
+
+            <button type="submit" class="btn">Upload</button>
+        </form>
     </div>
 {% endblock %}
