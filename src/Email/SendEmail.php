@@ -18,17 +18,18 @@ class SendEmail
         $this->mailer = $mailer;
     }
 
-    public function sendEmail($emailFrom, $emailTo, $emailSubject, $template, $attachFile ){
+    public function sendEmail(string $emailFrom, string $emailTo, string $emailSubject, string $templatePath, string $attachFilePath ) : void{
         $email = (new TemplatedEmail())
             ->from($emailFrom)
             ->to($emailTo)
             ->subject($emailSubject)
-            ->htmlTemplate($template)
-            ->attachFromPath($attachFile)
+            ->htmlTemplate($templatePath)
+            ->attachFromPath($attachFilePath)
             ;
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
+            //utworzenie nowego serwisu
         }
     }
 

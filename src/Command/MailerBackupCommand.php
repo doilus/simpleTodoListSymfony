@@ -54,6 +54,7 @@ class MailerBackupCommand extends Command
             'domi@domi.eu',
             'Your data backup ',
             'email/welcome.html.twig',
+            [],
             "sample.csv"
         );
 

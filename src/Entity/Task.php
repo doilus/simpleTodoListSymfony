@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
-use http\Encoding\Stream\Enbrotli;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -44,18 +43,26 @@ class Task
      */
     private $user;
 
+
     /**
      * @ORM\Column(type="boolean")
      */
     private $isDone;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    // name="imagesFileName", type="array", nullable=true
+    private $imageFileName;
+    /*
     public function __construct(
-        $title,
-        $slug,
-        $dueDate,
-        $description,
-        $user,
-        $isDone,
+        string $title,
+        string $slug,
+        \DateTimeInterface $dueDate,
+        string $description,
+        User $user,
+        bool $isDone,
+        string $imageFileName
     )
     {
         $this->title = $title;
@@ -64,7 +71,8 @@ class Task
         $this->description = $description;
         $this->user = $user;
         $this->isDone = $isDone;
-    }
+        $this->imageFileName = $imageFileName;
+    }*/
 
     public function getId(): ?int
     {
@@ -143,20 +151,31 @@ class Task
         return $this;
     }
 
-    public function checkDateReminder() : bool{
+    public function checkDateReminder(): bool
+    {
         $currentDate = new \DateTime;
+
         $days = $this->getDueDate()->diff($currentDate)->d;
-        if($days <= 3 && $days  >= 0 && $this->getDueDate()>$currentDate){
-            return true;
-        }
-        return false;
+
+        return ($days <= 3 && $days >= 0 && $this->getDueDate() > $currentDate);
     }
 
-    public function isOutdated() : bool{
+    public function isOutdated(): bool
+    {
         $currentDate = new \DateTime;
-        if($this->getDueDate() < $currentDate){
-            return true;
-        }
-        return false;
+
+        return ($this->getDueDate() < $currentDate);
+    }
+
+    public function getImageFileName()
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(?string $imageFileName)
+    {
+        $this->imageFileName = $imageFileName;
+
+        return $this;
     }
 }

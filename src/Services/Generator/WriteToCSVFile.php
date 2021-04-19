@@ -9,6 +9,7 @@ use App\Repository\TaskRepository;
 class WriteToCSVFile
 {
     private TaskRepository $taskRepository;
+
     public function __construct(
         TaskRepository $taskRepository
     )
@@ -16,12 +17,12 @@ class WriteToCSVFile
         $this->taskRepository = $taskRepository;
     }
 
-    public function writeToCSV()
+    public function writeToCSV(): void
     {
         $tasks = $this->taskRepository->findAll();
 
-        $fp =fopen("sample.csv", "w");
-        foreach ($tasks as $task){
+        $fp = fopen("sample.csv", "w");
+        foreach ($tasks as $task) {
             $data = [
                 $task->getId(),
                 $task->getTitle(),
@@ -30,7 +31,7 @@ class WriteToCSVFile
                 $task->getUser()->getId(),
                 $task->getIsDone() ? "True" : "False",
                 $task->getDescription()];
-            fputcsv($fp, $data, ',' );
+            fputcsv($fp, $data, ',');
         }
         fclose($fp);
     }

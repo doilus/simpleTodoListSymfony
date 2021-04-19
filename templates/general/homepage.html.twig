@@ -2,14 +2,14 @@
 
 {% block body %}
     <div class="container">
-        <h1> Hello {{ userName }}!</h1>
-    <div class="buttons">
-        <a href="{{ path('app_login') }}">
-            <span> Login </span>
-        </a>
-        <a href="{{ path('app_register') }}">
-            <span> Register </span>
-        </a>
-    </div>
+        <h1> Hello Anonymous!</h1>
+        <div class="buttons">
+            <a href="{{ path('app_login') }}">
+                <span> Login </span>
+            </a>
+            <a href="{{ path('app_register') }}">
+                <span> Register </span>
+            </a>
+        </div>
     </div>
 {% endblock %}
