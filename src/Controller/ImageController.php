@@ -3,37 +3,70 @@
 
 namespace App\Controller;
 
-use Gedmo\Sluggable\Util\Urlizer;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
+use App\Entity\Image;
+use App\Form\Type\ImageType;
+use App\Repository\ImageRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends AbstractController
 {
+    private ImageRepository $imageRepository;
+    private string $uploadPath;
+    public function __construct(
+        ImageRepository $imageRepository,
+        string $uploadPath
+    )
+    {
+        $this->imageRepository = $imageRepository;
+        $this->uploadPath = $uploadPath;
+    }
 
     /**
-     * @Route("/task/new/image", name="upload_image", methods={"POST"})
+     * @Route("/image/{id}/delete", name="image_delete", methods={"GET"})
      */
-    public function requestImage(Request $request): Response
+    public function deleteImage(Image $image): Response
     {
-        $uploadedFile = $request->files->get("image");
 
-        $destination = $this->getParameter('kernel.project_dir') . "\public\uploads";
+        $this->imageRepository->delete($image);
 
-        //extenstion:
-        //Urlizer - to get clear names
-        $orginalFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME); //without file extension
+        return $this->redirectToRoute('app_edit_task', ['id' => $image->getTaskId()->getId()]);
 
-        //nowa nazwa dla pliku
-        $newFileName = Urlizer::urlize( $orginalFileName ). '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+    }
 
-        dd($uploadedFile->move(
-            $destination,
-            $newFileName
-        ));
+    /**
+     * @Route("/image/{id}/edit", name="image_edit", methods={"POST", "GET"})
+     * @param Image $image
+     * @return Response
+     */
+    public function editImage(Image $image, Request $request) : Response{
 
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+
+        return $this->render('/image/edit_image_form.html.twig', [ 'form' => $form->createView(), 'task' => $image->getTaskId()]);
+    }
+
+    /**
+     * @Route("/image/{id}/download", name="download_image")
+     */
+    public function downloadImage(Image $image): Response
+    {
+
+        $file = $this->uploadPath . '/' . $image->getOfficialDestination();
+
+        //BinaryFileResponse::trustXSendfileTypeHeader();
+
+        $response = new BinaryFileResponse($file);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getClientNameWithExtension());
+
+
+        return $response;
     }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,10 +52,16 @@ class Task
     private $isDone;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="taskId")
      */
-    // name="imagesFileName", type="array", nullable=true
-    private $imageFileName;
+    private $imagesId;
+
+
+
+    public function __construct()
+    {
+        $this->imagesId = new ArrayCollection();
+    }
     /*
     public function __construct(
         string $title,
@@ -73,6 +81,7 @@ class Task
         $this->isDone = $isDone;
         $this->imageFileName = $imageFileName;
     }*/
+
 
     public function getId(): ?int
     {
@@ -167,6 +176,40 @@ class Task
         return ($this->getDueDate() < $currentDate);
     }
 
+
+    /**
+     * @return Collection|Image[]
+     */
+
+    public function getImagesId(): Collection
+    {
+        return $this->imagesId;
+    }
+
+    public function addImagesId(Image $imagesId): self
+    {
+        if (!$this->imagesId->contains($imagesId)) {
+            $this->imagesId[] = $imagesId;
+            $imagesId->setTaskId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImagesId(Image $imagesId): self
+    {
+        if ($this->imagesId->removeElement($imagesId)) {
+            // set the owning side to null (unless already changed)
+            if ($imagesId->getTaskId() === $this) {
+                $imagesId->setTaskId(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /*
     public function getImageFileName()
     {
         return $this->imageFileName;
@@ -177,5 +220,6 @@ class Task
         $this->imageFileName = $imageFileName;
 
         return $this;
-    }
+    }*/
+
 }

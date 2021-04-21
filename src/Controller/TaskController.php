@@ -4,11 +4,13 @@
 namespace App\Controller;
 
 
+use App\Entity\Image;
 use App\Entity\Task;
 use App\Form\Type\TaskType;
+use App\Repository\ImageRepository;
 use App\Repository\TaskRepository;
 use App\Services\Generator\AddImage;
-use Gedmo\Sluggable\Util\Urlizer;
+use App\Services\Generator\GetImageName;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +23,24 @@ class TaskController extends AbstractController
 
 
     private TaskRepository $taskRepository;
-    private AddImage $addImage;
-
+    private GetImageName $getImageName;
+    private ImageRepository $imageRepository;
+    private string $uploadPath;
     /**
      * ListController constructor.
      * @param TaskRepository $taskRepository
      */
     public function __construct(
         TaskRepository $taskRepository,
-        AddImage $addImage
+        GetImageName $getImageName,
+        ImageRepository $imageRepository,
+        string $uploadPath
     )
     {
         $this->taskRepository = $taskRepository;
-        $this->addImage = $addImage;
+        $this->getImageName = $getImageName;
+        $this->imageRepository = $imageRepository;
+        $this->uploadPath = $uploadPath;
     }
 
     /**
@@ -84,16 +91,35 @@ class TaskController extends AbstractController
             $task = $form->getData();
             $task->setUser($this->getUser());
 
-            $uploadedFile = $form['imageFile']->getData();
-            if ($uploadedFile) {
-                $newFileName = $this->addImage->addImage($uploadedFile);
-                $task->setImageFileName($newFileName);
-            }
-
             $this->taskRepository->save($task);
 
-            $this->addFlash('success', 'Task was created!');
 
+
+            /**
+             * @var UploadedFile $uploadedFile
+             */
+            $uploadedFile = $form['imageFile']->getData();
+            $destination = $this->uploadPath . "/images_task";
+
+
+            if ($uploadedFile) {
+                $newFileName = $this->getImageName->getImageName($uploadedFile, $destination);
+
+                $image = new Image(
+                    pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),
+                    $newFileName,
+                    5,
+                    '\images_task',
+                    $task
+                );
+
+                $this->imageRepository->save($image);
+
+
+            }
+
+
+            $this->addFlash('success', 'Task was created!');
 
             return $this->redirectToRoute("app_task");
         }
@@ -119,12 +145,29 @@ class TaskController extends AbstractController
              * @var UploadedFile $uploadedFile
              */
             $uploadedFile = $form['imageFile']->getData();
+            $officialDestination = "/uploads/images_task";
+            $serverDestination = $this->uploadPath . $officialDestination;
+
 
             if ($uploadedFile) {
-                $newFileName = $this->addImage->addImage($uploadedFile);
-                $task->setImageFileName($newFileName);
-            }
+                $newFileName = $this->getImageName->getImageName($uploadedFile);
 
+                $uploadedFile->move($serverDestination, $newFileName);
+
+                $size = filesize($serverDestination . "/" . $newFileName );
+
+                $image = new Image(
+                    pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),
+                    $newFileName,
+                    $officialDestination,
+                    $task,
+                    $size
+                );
+
+
+                $this->imageRepository->save($image);
+
+            }
 
             $task = $form->getData();
             $this->taskRepository->save($task);
@@ -136,6 +179,7 @@ class TaskController extends AbstractController
 
         return $this->render('list/edit_form.html.twig', [
             'form' => $form->createView(),
+            'images' => $task->getImagesId(),
         ]);
     }
 

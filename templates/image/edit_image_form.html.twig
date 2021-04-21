@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {% if form.vars.data.imagePath %}
+        <img src="{{ asset(form.vars.data.officialDestination) }}">
+    {% endif %}
+
+
+    {{ form_end(form) }}
+
+    <button type="submit" class="btn">
+        Edit Image Name
+    </button>
+    <a href="{{ path('app_edit_task', {id: task.id}) }}">
+        <span class="btnCancel"> Cancel </span>
+    </a>
+    <a href="{{ path('download_image', {id: form.vars.data.id}) }}">
+        <button class="btn">
+            <span> Download image </span>
+        </button>
+    </a>
+
+{% endblock %}

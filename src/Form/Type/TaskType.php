@@ -32,7 +32,8 @@ class TaskType extends AbstractType
                         'maxSize' => '5k'   //set size with parametres - 5 kB
                     ])
                 ]
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
