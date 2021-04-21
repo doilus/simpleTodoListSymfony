@@ -26,6 +26,7 @@ class TaskController extends AbstractController
     private GetImageName $getImageName;
     private ImageRepository $imageRepository;
     private string $uploadPath;
+
     /**
      * ListController constructor.
      * @param TaskRepository $taskRepository
@@ -94,7 +95,6 @@ class TaskController extends AbstractController
             $this->taskRepository->save($task);
 
 
-
             /**
              * @var UploadedFile $uploadedFile
              */
@@ -154,7 +154,7 @@ class TaskController extends AbstractController
 
                 $uploadedFile->move($serverDestination, $newFileName);
 
-                $size = filesize($serverDestination . "/" . $newFileName );
+                $size = filesize($serverDestination . "/" . $newFileName);
 
                 $image = new Image(
                     pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),

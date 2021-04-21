@@ -47,6 +47,14 @@ class ImageController extends AbstractController
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $image = $form->getData();
+            $this->imageRepository->save($image);
+
+            $this->addFlash('sucess', 'Task was updated');
+
+
+        }
 
 
         return $this->render('/image/edit_image_form.html.twig', [ 'form' => $form->createView(), 'task' => $image->getTaskId()]);
