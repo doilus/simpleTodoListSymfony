@@ -1,0 +1,180 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .buttons{
+    padding: 20px;
+
+}
+
+.container .buttons a,
+.container .buttonAdd .add-task,
+.loginForm button,
+.registerForm button,
+.taskAddForm form button,
+.taskAddForm form a span,
+.resetPassword p a{
+    background-color: cornflowerblue;
+    color: white;
+    padding: 1em 1.5em;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    border: none;
+}
+.container .buttons a:hover,
+.container .buttonAdd .add-task:hover,
+.loginForm button:hover,
+.registerForm button:hover,
+.taskAddForm form button:hover,
+.taskAddForm form a span:hover,
+.resetPassword p a:hover{
+    opacity: 50%;
+}
+.taskAddForm form a .btnCancel{
+    background-color: #264459;
+}
+
+.container h1 {
+    color: slateblue;
+    font-size: 50px;
+    margin: 10px;
+}
+.container .reminder h2 {
+    color: #db1b1b;
+    text-align: center;
+    margin-bottom: 12px;
+}
+.container .reminder table,
+.container .taskTable{
+    margin: 10px;
+}
+.container .reminder table,
+.container .reminder table th,
+.container .reminder table td{
+    padding: 5px;
+    padding-inline: 15px;
+}
+.container .reminder table th{
+    color: white;
+    background-color: #B0413E;
+    text-align: center;
+}
+.container .reminder table tr:nth-child(even){
+    background-color: #f3acac;
+}
+.container .taskTable,
+.container .taskTable th,
+.container .taskTable td{
+    padding: 10px;
+    padding-inline: 30px;
+    text-align: center;
+}
+.container .taskTable th{
+    color: white;
+    background-color: #8ab0ef;
+}
+.container .taskTable tr:nth-child(even){
+    background-color: #eff9fd;
+}
+
+.container .taskTable  tr td .options{
+    display: grid;
+    grid-template-columns: auto auto;
+    text-decoration: none;
+    color: darkblue;
+}
+.container .taskTable  tr td .options a:hover{
+    opacity: 50%;
+}
+
+
+.mb-3 {
+    color: dodgerblue;
+}
+.mb-3 span{
+    color: darkblue;
+    font-weight: bold;
+    padding: 0.5em 0.5em;
+    background-color: #a3c0ec;
+}
+.mb-3 a {
+    text-decoration: none;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 0.5em ;
+}
+.mb-3 a:hover{
+    opacity: 50%;
+}
+
+.loginForm,
+.registerForm form div,
+.registerForm h1,
+.registerForm form .btn,
+.taskAddForm form div div,
+.taskAddForm h1,
+.taskAddForm form button,
+.taskAddForm form a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.registerForm form .btn,
+.taskAddForm form button,
+.taskAddForm form a{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+input,
+textarea{
+    display: block;
+    width: 40%;
+    padding:10px;
+    border-radius: 10px;
+    border:1px solid #5eb5e0;
+}
+input:hover,
+textarea:hover{
+    border: 1px solid #226985;
+}
+.taskAddForm form div div div{
+    display: grid;
+    grid-template-columns: auto auto auto;
+
+}
+.taskAddForm form div div select{
+    padding: 10px;
+    margin-inline: 5px;
+}
+.loginForm label,
+.registerForm form div label,
+.taskAddForm form div label{
+    padding: 10px;
+}
+.loginForm button,
+.registerForm button,
+.taskAddForm form button,
+.taskAddForm form a span,
+.resetPassword p a{
+    margin-top: 20px;
+}
+.taskAddForm form a{
+    text-decoration: none;
+}
+.loginForm a{
+    text-decoration: none;
+    color: #264459;
+}
+.loginForm a:hover{
+    opacity: 50%;
+}
+.resetPassword p{
+    text-align: center;
+    color: #2c6988;
+}
