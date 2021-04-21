@@ -4,10 +4,11 @@
         title: 'Update task:'
     })
     }}
-
-    <table>
+    <div class="container">
+    <table class="taskTable">
         <tr>
             <th>Image</th>
+            <th>Image Name</th>
             <th>Options</th>
         </tr>
         {% for image in images.Values %}
@@ -15,6 +16,9 @@
                 <td>
                     <img src="{{ image.getOfficialDestination }}" width="100">
                     <hr>
+                </td>
+                <td>
+                    {{ image.clientName }}
                 </td>
                 <td>
                     <div class="options">
@@ -30,7 +34,7 @@
 
         {% endfor %}
     </table>
-
+    </div>
 
 {% endblock %}
 
