@@ -2,38 +2,40 @@
     {{ include('list/_form.html.twig', {
         button_text: 'Update task',
         title: 'Update task:'
-    })
-    }}
+    }) }}
     <div class="container">
-    <table class="taskTable">
-        <tr>
-            <th>Image</th>
-            <th>Image Name</th>
-            <th>Options</th>
-        </tr>
-        {% for image in images.Values %}
-            <tr>
-                <td>
-                    <img src="{{ image.getOfficialDestination }}" width="100">
-                    <hr>
-                </td>
-                <td>
-                    {{ image.clientName }}
-                </td>
-                <td>
-                    <div class="options">
-                        <a href="{{ path('image_edit', { id: image.id}) }}">
-                            <span class="fa fa-pencil-alt"></span>
-                        </a>
+        <table class="taskTable">
+            {% for image in images.Values %}
 
-                        <a href="{{ path('image_delete', { id: image.id}) }}" onclick="return confirm('Are you sure?')">
-                            <span class="fa fa-trash"></span></a>
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Image Name</th>
+                    <th>Options</th>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ image.getOfficialDestination }}" width="100">
+                        <hr>
+                    </td>
+                    <td>
+                        {{ image.clientName }}
+                    </td>
+                    <td>
+                        <div class="options">
+                            <a href="{{ path('image_edit', { id: image.id}) }}">
+                                <span class="fa fa-pencil-alt"></span>
+                            </a>
 
-        {% endfor %}
-    </table>
+                            <a href="{{ path('image_delete', { id: image.id}) }}"
+                               onclick="return confirm('Are you sure?')">
+                                <span class="fa fa-trash"></span></a>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </table>
     </div>
 
 {% endblock %}

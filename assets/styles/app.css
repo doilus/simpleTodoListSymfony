@@ -10,13 +10,42 @@
 
 }
 
+.imageForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.imageForm form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .imageForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.imageForm .buttons a .btnCancel{
+    align-items: center;
+}
+
 .container .buttons a,
 .container .buttonAdd .add-task,
 .loginForm button,
 .registerForm button,
 .taskAddForm form button,
 .taskAddForm form a span,
-.resetPassword p a{
+.imageForm .buttons .downloadButton,
+.imageForm a .btnCancel,
+.resetPassword p a,
+.imageForm form .editButton
+{
     background-color: cornflowerblue;
     color: white;
     padding: 1em 1.5em;
@@ -31,10 +60,15 @@
 .registerForm button:hover,
 .taskAddForm form button:hover,
 .taskAddForm form a span:hover,
-.resetPassword p a:hover{
+.imageForm .buttons .downloadButton:hover,
+.resetPassword p a:hover,
+.imageForm a .btnCancel:hover,
+.imageForm form .editButton:hover{
     opacity: 50%;
 }
-.taskAddForm form a .btnCancel{
+.taskAddForm form a .btnCancel,
+.imageForm a .btnCancel
+{
     background-color: #264459;
 }
 
@@ -139,6 +173,11 @@ textarea{
     border-radius: 10px;
     border:1px solid #5eb5e0;
 }
+
+.imageForm form input,
+.imageForm form textarea{
+    width: 100%;
+}
 input:hover,
 textarea:hover{
     border: 1px solid #226985;
@@ -161,7 +200,9 @@ textarea:hover{
 .registerForm button,
 .taskAddForm form button,
 .taskAddForm form a span,
-.resetPassword p a{
+.imageForm a .btnCancel,
+.resetPassword p a,
+.imageForm form .editButton{
     margin-top: 20px;
 }
 .taskAddForm form a{
@@ -178,3 +219,6 @@ textarea:hover{
     text-align: center;
     color: #2c6988;
 }
+
+
+
