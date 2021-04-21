@@ -98,9 +98,9 @@ class Image
         return $this->size;
     }
 
-    public function setSize(): self
+    public function setSize(int $size): self
     {
-
+        $this->size = $size;
         // $this->size = filesize($this->imagePath . '/' . $this->createdName);
 
         return $this;

@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Form\Type\ImageType;
 use App\Repository\ImageRepository;
+use App\Services\Generator\GetImageName;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,13 +19,16 @@ class ImageController extends AbstractController
 {
     private ImageRepository $imageRepository;
     private string $uploadPath;
+    private GetImageName $getImageName;
     public function __construct(
         ImageRepository $imageRepository,
-        string $uploadPath
+        string $uploadPath,
+        GetImageName $getImageName
     )
     {
         $this->imageRepository = $imageRepository;
         $this->uploadPath = $uploadPath;
+        $this->getImageName = $getImageName;
     }
 
     /**
@@ -48,12 +53,37 @@ class ImageController extends AbstractController
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            //image change
+            $newUploadedFile = $form['imageFile']->getData();
+
+            $officialDestination = "/uploads/images_task";
+            $serverDestination = $this->uploadPath . $officialDestination;
+
+            if($newUploadedFile){   //jezeli zostalo wybrane
+                $newFileName = $form['clientName']->getData();
+                $newCreatedFileName = Urlizer::urlize($newFileName) . '-' . uniqid() . '.' . $newUploadedFile->guessExtension();
+
+                $task = $image->getTaskId();
+                $newUploadedFile->move($serverDestination, $newCreatedFileName);   //zapisanie nowego zdjecia
+
+                //usuniecie starego pliku
+                $oldUploadedFile = $this->uploadPath . $image->getOfficialDestination();
+                unlink($oldUploadedFile);
+
+                $newSize= filesize($serverDestination . "/" . $newCreatedFileName);
+
+                $image->setSize($newSize)
+                    ->setClientName($newFileName)
+                    ->setCreatedName($newCreatedFileName);
+
+            }
+
             $image = $form->getData();
             $this->imageRepository->save($image);
 
             $this->addFlash('sucess', 'Task was updated');
 
-
+            return $this->redirectToRoute('app_edit_task', ['id' => $image->getTaskId()->getId()]);
         }
 
 
