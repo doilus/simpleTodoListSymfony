@@ -99,7 +99,6 @@ class ImageController extends AbstractController
         $file = $this->uploadPath . '/' . $image->getOfficialDestination();
 
         //BinaryFileResponse::trustXSendfileTypeHeader();
-
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getClientNameWithExtension());
 

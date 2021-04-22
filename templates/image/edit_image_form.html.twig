@@ -6,9 +6,6 @@
         {% if form.vars.data.imagePath %}
             <img src="{{ asset(form.vars.data.officialDestination) }}" alt="">
         {% endif %}
-
-
-
         {{ form_widget(form) }}
         <button type="submit" class="editButton">
             Edit Image Name
@@ -16,7 +13,6 @@
         {{ form_end(form) }}
         <br/>
         <div class="buttons">
-
             <a href="{{ path('download_image', {id: form.vars.data.id}) }}">
                 <button class="downloadButton">
                     <span> Download image </span>
