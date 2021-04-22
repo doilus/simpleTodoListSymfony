@@ -11,6 +11,7 @@ class GetImageName
 {
 
     private string $uploadPath;
+
     public function __construct(
         string $uploadPath
     )
@@ -18,7 +19,8 @@ class GetImageName
         $this->uploadPath = $uploadPath;
     }
 
-    public function getImageName(UploadedFile $uploadedFile) : string{
+    public function getImageName(UploadedFile $uploadedFile): string
+    {
 
 
         $orginalFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME); //without file extension

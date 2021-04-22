@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @method Image|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,13 +22,15 @@ class ImageRepository extends ServiceEntityRepository
         parent::__construct($registry, Image::class);
     }
 
-    public function save(Image $image){
+    public function save(Image $image)
+    {
 
         $this->_em->persist($image);
         $this->_em->flush();
     }
 
-    public function delete(Image $image){
+    public function delete(Image $image)
+    {
 
         $this->_em->remove($image);
         $this->_em->flush();

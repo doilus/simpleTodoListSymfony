@@ -38,23 +38,11 @@ class InvitationController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
             $invitationTo = $form['email']->getData();
-
-            //wygeneruj linka do rejestracji
-            //przypisz go do zmiennej i podaj tu do maila jako context
-            //utworz nową Invitation
-            //przypisz do niej atrybuty - id i daty
-            //przypisz do niej wygenerowany url
-            //$user = $this->getUser();
             $user = $this->userRepository->findOneBy(['email' => $this->getUser()->getUsername()]);
-
             $this->setInvitation->setInvitation($user, $invitationTo);
 
-            //wyslij maila z zaproszeniem
-            //funkcja
-
-
-            //daj znac ze zaproszenie zostalo wyslane
             return $this->redirectToRoute('invitation_send_success');
         }
 

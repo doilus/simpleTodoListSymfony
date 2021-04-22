@@ -8,9 +8,9 @@ use App\Form\Type\ImageType;
 use App\Repository\ImageRepository;
 use App\Services\Generator\GetImageName;
 use Gedmo\Sluggable\Util\Urlizer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,6 +20,7 @@ class ImageController extends AbstractController
     private ImageRepository $imageRepository;
     private string $uploadPath;
     private GetImageName $getImageName;
+
     public function __construct(
         ImageRepository $imageRepository,
         string $uploadPath,
@@ -48,18 +49,19 @@ class ImageController extends AbstractController
      * @param Image $image
      * @return Response
      */
-    public function editImage(Image $image, Request $request) : Response{
+    public function editImage(Image $image, Request $request): Response
+    {
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             //image change
             $newUploadedFile = $form['imageFile']->getData();
 
             $officialDestination = "/uploads/images_task";
             $serverDestination = $this->uploadPath . $officialDestination;
 
-            if($newUploadedFile){   //jezeli zostalo wybrane
+            if ($newUploadedFile) {   //jezeli zostalo wybrane
                 $newFileName = $form['clientName']->getData();
                 $newCreatedFileName = Urlizer::urlize($newFileName) . '-' . uniqid() . '.' . $newUploadedFile->guessExtension();
 
@@ -70,7 +72,7 @@ class ImageController extends AbstractController
                 $oldUploadedFile = $this->uploadPath . $image->getOfficialDestination();
                 unlink($oldUploadedFile);
 
-                $newSize= filesize($serverDestination . "/" . $newCreatedFileName);
+                $newSize = filesize($serverDestination . "/" . $newCreatedFileName);
 
                 $image->setSize($newSize)
                     ->setClientName($newFileName)
@@ -81,13 +83,13 @@ class ImageController extends AbstractController
             $image = $form->getData();
             $this->imageRepository->save($image);
 
-            $this->addFlash('sucess', 'Task was updated');
+            $this->addFlash('sucess', 'Image was updated');
 
             return $this->redirectToRoute('app_edit_task', ['id' => $image->getTaskId()->getId()]);
         }
 
 
-        return $this->render('/image/edit_image_form.html.twig', [ 'form' => $form->createView(), 'task' => $image->getTaskId()]);
+        return $this->render('/image/edit_image_form.html.twig', ['form' => $form->createView(), 'task' => $image->getTaskId()]);
     }
 
     /**
@@ -97,11 +99,8 @@ class ImageController extends AbstractController
     {
 
         $file = $this->uploadPath . '/' . $image->getOfficialDestination();
-
-        //BinaryFileResponse::trustXSendfileTypeHeader();
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getClientNameWithExtension());
-
 
         return $response;
     }

@@ -147,12 +147,11 @@ class Image
         return $this->imagePath . '/' . $this->createdName;
     }
 
-    public function getClientNameWithExtension(){
+    public function getClientNameWithExtension()
+    {
 
-        return $this->clientName . '.' .  pathinfo($this->createdName, PATHINFO_EXTENSION);
+        return $this->clientName . '.' . pathinfo($this->createdName, PATHINFO_EXTENSION);
     }
-
-
 
 
 }

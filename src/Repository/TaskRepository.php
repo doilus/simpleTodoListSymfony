@@ -19,17 +19,17 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    public function save(Task $task){
+    public function save(Task $task)
+    {
         $this->_em->persist($task);
         $this->_em->flush();
     }
 
-    public function delete(Task $task){
+    public function delete(Task $task)
+    {
         $this->_em->remove($task);
         $this->_em->flush();
     }
-
-
 
 
 }

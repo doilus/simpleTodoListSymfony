@@ -113,7 +113,7 @@ class Invitation
     {
         $timespan = 15;
         $this->dueDate = new \DateTime($this->sentDate->format('Y-m-d H:i'));
-        $this->dueDate->add(new DateInterval('PT'.$timespan.'M'));
+        $this->dueDate->add(new DateInterval('PT' . $timespan . 'M'));
 
         return $this;
     }

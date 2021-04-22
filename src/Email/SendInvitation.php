@@ -35,8 +35,7 @@ class SendInvitation
                 'friendEmail' => $userEmail,
                 'invitation' => $invitation,
                 'timeLeft' => $timeLeft
-            ])
-        ;
+            ]);
 
         $this->mailerInterface->send($email);
     }
