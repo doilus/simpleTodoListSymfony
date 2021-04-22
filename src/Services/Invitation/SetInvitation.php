@@ -70,6 +70,9 @@ class SetInvitation
         if ($currentDate > $invitation->getDueDate()) {
             return false;
         }
+        if($invitation->getStatusRegistered() === 1){
+            return false;   //warto dodac inny komunikat błędu - nie spóźnienie, a juz istniejacy zarejestrowany mail
+        }
         return true;
     }
 

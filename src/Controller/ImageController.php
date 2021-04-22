@@ -55,7 +55,6 @@ class ImageController extends AbstractController
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //image change
             $newUploadedFile = $form['imageFile']->getData();
 
             $officialDestination = "/uploads/images_task";
@@ -66,9 +65,8 @@ class ImageController extends AbstractController
                 $newCreatedFileName = Urlizer::urlize($newFileName) . '-' . uniqid() . '.' . $newUploadedFile->guessExtension();
 
                 $task = $image->getTaskId();
-                $newUploadedFile->move($serverDestination, $newCreatedFileName);   //zapisanie nowego zdjecia
+                $newUploadedFile->move($serverDestination, $newCreatedFileName);
 
-                //usuniecie starego pliku
                 $oldUploadedFile = $this->uploadPath . $image->getOfficialDestination();
                 unlink($oldUploadedFile);
 
