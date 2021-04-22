@@ -4,6 +4,7 @@
 namespace App\Email;
 
 
+use App\Entity\Invitation;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -17,16 +18,23 @@ class SendInvitation
         $this->mailerInterface = $mailerInterface;
     }
 
-    public function sendInvitation(string $emailFrom, string $friendEmail, string $emailTo): void
+    public function sendInvitation(Invitation $invitation): void
     {
         $templatePath = 'email/invitation/invitation_email_template.html.twig';
+
+        $userEmail = $invitation->getUserId()->getEmail();
+
+        $timeLeft = $invitation->getSentDate()->diff($invitation->getDueDate())->i;
+
         $email = (new TemplatedEmail())
-            ->from($emailFrom)
-            ->to($emailTo)
+            ->from('alien@examle.eu')
+            ->to($invitation->getEmailFriend())
             ->subject('Invitation')
             ->htmlTemplate($templatePath)
             ->context([
-                'friendEmail' => $friendEmail
+                'friendEmail' => $userEmail,
+                'invitation' => $invitation,
+                'timeLeft' => $timeLeft
             ])
         ;
 

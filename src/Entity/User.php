@@ -43,9 +43,15 @@ class User implements UserInterface
      */
     private $tasks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Invitation::class, mappedBy="userId")
+     */
+    private $invitations;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
 
@@ -154,6 +160,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($task->getUser() === $this) {
                 $task->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Invitation[]
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): self
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations[] = $invitation;
+            $invitation->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): self
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getUserId() === $this) {
+                $invitation->setUserId(null);
             }
         }
 
