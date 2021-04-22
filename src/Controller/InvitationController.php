@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use App\Form\Type\InvitationType;
 use App\Repository\UserRepository;
 use App\Services\Invitation\SetInvitation;
@@ -15,15 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class InvitationController extends AbstractController
 {
     private SetInvitation $setInvitation;
+
     private UserRepository $userRepository;
 
     public function __construct(
-
         SetInvitation $setInvitation,
         UserRepository $userRepository
     )
     {
-
         $this->setInvitation = $setInvitation;
         $this->userRepository = $userRepository;
     }
@@ -33,22 +33,27 @@ class InvitationController extends AbstractController
      */
     public function createInvitation(Request $request): Response
     {
-
         $form = $this->createForm(InvitationType::class);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            $invitationTo = $form['email']->getData();
-            $user = $this->userRepository->findOneBy(['email' => $this->getUser()->getUsername()]);
-            $this->setInvitation->setInvitation($user, $invitationTo);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipient = $form['email']->getData();
+
+            /** @var User $loggedUser */
+            $loggedUser = $this->getUser();
+
+            $this->setInvitation->setInvitation(
+                $loggedUser,
+                $recipient
+            );
 
             return $this->redirectToRoute('invitation_send_success');
         }
 
-        return $this->render('email/invitation/invitation_form.html.twig',
-            ['form' => $form->createView()
-            ]);
+        return $this->render('invitation/invitation_form.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -56,7 +61,11 @@ class InvitationController extends AbstractController
      */
     public function infoSuccessInvitation(): Response
     {
-        return $this->render('email/invitation/invitation_success.html.twig');
+        //todo: do zastanowienia się czy nie możemy zrobic jakieś strony z listą zaproszeń
+
+        $this->addFlash('emailSent', 'yey!');
+
+        return $this->render('invitation/invitation_success.html.twig');
     }
 
 }

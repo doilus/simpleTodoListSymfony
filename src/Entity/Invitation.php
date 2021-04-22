@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invitation
 {
+    public const TIMESPAN = 15;
 
+    public const STATUS_NEW = false;
+    public const STATUS_ACCEPTED = true;
 
     /**
      * @ORM\Id
@@ -54,13 +57,16 @@ class Invitation
     public function __construct(
         User $userId,
         string $emailFriend,
-        \DateTime $sentDate
+        string $urlRandom
     )
     {
         $this->userId = $userId;
         $this->emailFriend = $emailFriend;
-        $this->sentDate = $sentDate;
+        $this->urlRandom = $urlRandom;
 
+        $this->sentDate = new \DateTime();
+        $this->dueDate = new \DateTime("+" . self::TIMESPAN . ' minutes');
+        $this->statusRegistered = self::STATUS_NEW;
     }
 
     public function getId(): ?int
@@ -109,15 +115,6 @@ class Invitation
         return $this->dueDate;
     }
 
-    public function setDueDate(): self
-    {
-        $timespan = 15;
-        $this->dueDate = new \DateTime($this->sentDate->format('Y-m-d H:i'));
-        $this->dueDate->add(new DateInterval('PT' . $timespan . 'M'));
-
-        return $this;
-    }
-
     public function getStatusRegistered(): ?bool
     {
         return $this->statusRegistered;
@@ -140,5 +137,30 @@ class Invitation
         $this->urlRandom = $urlRandom;
 
         return $this;
+    }
+
+    public function containsToken(string $token): bool
+    {
+        return (bool)($this->urlRandom === $token);
+    }
+
+    public function acceptInvitation(): void
+    {
+        $this->statusRegistered = self::STATUS_ACCEPTED;
+    }
+
+    public function isValid(): bool
+    {
+        $currentDate = new \DateTime();
+
+        return (
+            $currentDate < $this->dueDate
+            || $this->statusRegistered === self::STATUS_ACCEPTED
+        );
+    }
+
+    public function isAccepted(): bool
+    {
+        return $this->statusRegistered === self::STATUS_ACCEPTED;
     }
 }

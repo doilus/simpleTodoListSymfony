@@ -17,90 +17,119 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends AbstractController
 {
-    private ImageRepository $imageRepository;
     private string $uploadPath;
-    private GetImageName $getImageName;
+
+    private ImageRepository $imageRepository;
 
     public function __construct(
-        ImageRepository $imageRepository,
         string $uploadPath,
-        GetImageName $getImageName
+        ImageRepository $imageRepository
     )
     {
-        $this->imageRepository = $imageRepository;
         $this->uploadPath = $uploadPath;
-        $this->getImageName = $getImageName;
+        $this->imageRepository = $imageRepository;
     }
 
     /**
-     * @Route("/image/{id}/delete", name="image_delete", methods={"GET"})
+     * @Route("/image/{id}/download", name="download_image", methods={"GET"})
      */
-    public function deleteImage(Image $image): Response
+    public function downloadImage(Image $image): Response
     {
+        $file = $this->uploadPath . '/' . $image->getOfficialDestination();
 
-        $this->imageRepository->delete($image);
+        $response = new BinaryFileResponse($file);
 
-        return $this->redirectToRoute('app_edit_task', ['id' => $image->getTaskId()->getId()]);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getClientNameWithExtension());
 
+        return $response;
     }
+
 
     /**
      * @Route("/image/{id}/edit", name="image_edit", methods={"POST", "GET"})
-     * @param Image $image
-     * @return Response
      */
-    public function editImage(Image $image, Request $request): Response
+    public function editImage(Request $request, Image $image = null): Response
     {
+        if (!$image) {
+            return $this->redirectToRoute('app_homepage');
+        }
 
         $form = $this->createForm(ImageType::class, $image);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $newUploadedFile = $form['imageFile']->getData();
 
-            $officialDestination = "/uploads/images_task";
-            $serverDestination = $this->uploadPath . $officialDestination;
-
             if ($newUploadedFile) {   //jezeli zostalo wybrane
                 $newFileName = $form['clientName']->getData();
-                $newCreatedFileName = Urlizer::urlize($newFileName) . '-' . uniqid() . '.' . $newUploadedFile->guessExtension();
 
-                $task = $image->getTaskId();
+                $serverDestination = $this->prepareServerDestination();
+
+                $newCreatedFileName = $this->prepareFileName(
+                    $newFileName,
+                    $newUploadedFile->guessExtension()
+                );
+
                 $newUploadedFile->move($serverDestination, $newCreatedFileName);
 
-                $oldUploadedFile = $this->uploadPath . $image->getOfficialDestination();
-                unlink($oldUploadedFile);
+                $this->removeOldFile($image);
 
                 $newSize = filesize($serverDestination . "/" . $newCreatedFileName);
 
                 $image->setSize($newSize)
                     ->setClientName($newFileName)
                     ->setCreatedName($newCreatedFileName);
-
             }
 
             $image = $form->getData();
+
             $this->imageRepository->save($image);
 
             $this->addFlash('sucess', 'Image was updated');
 
-            return $this->redirectToRoute('app_edit_task', ['id' => $image->getTaskId()->getId()]);
+            return $this->redirectToRoute('app_edit_task', [
+                'id' => $image->getTaskId()->getId()
+            ]);
         }
 
 
-        return $this->render('/image/edit_image_form.html.twig', ['form' => $form->createView(), 'task' => $image->getTaskId()]);
+        return $this->render('/image/edit_image_form.html.twig', [
+            'form' => $form->createView(),
+            'task' => $image->getTaskId()
+        ]);
     }
 
     /**
-     * @Route("/image/{id}/download", name="download_image")
+     * @Route("/image/{id}/delete", name="image_delete", methods={"DELETE"})
      */
-    public function downloadImage(Image $image): Response
+    public function deleteImage(Image $image): Response
     {
+        $this->imageRepository->delete($image);
 
-        $file = $this->uploadPath . '/' . $image->getOfficialDestination();
-        $response = new BinaryFileResponse($file);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->getClientNameWithExtension());
+        return $this->redirectToRoute('app_edit_task', [
+            'id' => $image->getTaskId()->getId()
+        ]);
+    }
 
-        return $response;
+    private function prepareFileName(
+        string $newFileName,
+        string $fileExtension
+    ): string
+    {
+        return Urlizer::urlize($newFileName) . '-' . uniqid() . '.' . $fileExtension;
+    }
+
+    private function prepareServerDestination(): string
+    {
+        return $this->uploadPath . $this->getParameter('official_destination_task_files');
+    }
+
+    private function removeOldFile(Image $image): void
+    {
+        $oldUploadedFilePath = $this->uploadPath . $image->getOfficialDestination();
+
+        unlink($oldUploadedFilePath);
     }
 
 }

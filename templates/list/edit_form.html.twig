@@ -25,9 +25,8 @@
                                 <span class="fa fa-pencil-alt"></span>
                             </a>
 
-                            <a href="{{ path('image_delete', { id: image.id}) }}"
-                               onclick="return confirm('Are you sure?')">
-                                <span class="fa fa-trash"></span></a>
+                            {% include 'list/_delete_form.html.twig' %}
+
                         </div>
                     </td>
                 </tr>

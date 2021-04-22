@@ -42,7 +42,6 @@ class MailerBackupCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $this->writeToCSVFile->writeToCSV();
 
         $this->sendEmail->sendEmail(
@@ -50,7 +49,6 @@ class MailerBackupCommand extends Command
             'domi@domi.eu',
             'Your data backup ',
             'email/welcome.html.twig',
-            [],
             "sample.csv"
         );
 

@@ -1,0 +1,10 @@
+<form id="deleteForm_{{ image.id  }}" action="{{ path('image_delete', { id: image.id}) }}" onSubmit="return confirm('Are you sure?')">
+
+    <input type="hidden" name="_method" value="DELETE">
+
+    <button type="submit" class="clear-btn">
+        <span class="fa fa-trash"></span>
+    </button>
+
+{#    <span class="fa fa-trash" onclick="$('#deleteForm_{{ image.id  }}').submit()"></span>#}
+</form>
