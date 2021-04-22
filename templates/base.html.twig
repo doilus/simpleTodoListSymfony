@@ -19,7 +19,7 @@
         {% block login %}
             {% if app.user %}
                 <div class="mb-3">
-                    You are logged in as <span>{{ app.user.username }} </span><a href="{{ path('app_logout') }}">Logout</a>
+                    You are logged in as <span>{{ app.user.username }} </span><a href="{{ path('app_logout') }}">Logout</a> <a href="{{ path('send_invitation') }}">Send invitation</a>
                 </div>
             {% endif %}
         {% endblock %}
