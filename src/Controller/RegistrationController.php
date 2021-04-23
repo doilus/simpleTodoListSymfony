@@ -44,6 +44,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
+    #[Route('/register/{token}', name: 'app_register_invitation')]
     public function register(Request $request, string $token = null): Response
     {
 
@@ -87,6 +88,7 @@ class RegistrationController extends AbstractController
 
             if($token){
                 $invitation->acceptInvitation();
+                $this->invitationRepository->save($invitation);
             }
 
             return $this->redirectToRoute('app_login');

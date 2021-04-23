@@ -7,7 +7,8 @@
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+                  integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
@@ -19,7 +20,11 @@
         {% block login %}
             {% if app.user %}
                 <div class="mb-3">
-                    You are logged in as <span>{{ app.user.username }} </span><a href="{{ path('app_logout') }}">Logout</a> <a href="{{ path('send_invitation') }}">Send invitation</a>
+                    You are logged in as <span>{{ app.user.username }} </span><a href="{{ path('app_logout') }}">Logout</a>
+                    <a href="{{ path('send_invitation') }}">Send invitation</a>
+
+                    <a href="{{ path('invitation_list') }}">Invitation list</a>
+
                 </div>
             {% endif %}
         {% endblock %}

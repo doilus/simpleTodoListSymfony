@@ -32,10 +32,20 @@ class SetInvitation
             $userFriendTo,
             $token
         );
-
-
         $this->invitationRepository->save($invitation);            //zapis - usuniecie obslugiwane w repo
 
         $this->sendInvitation->sendInvitation($invitation);
+    }
+
+    public function searchAcceptedInvitations(User $user): ?Invitation
+    {
+        $invitations = $this->invitationRepository->findOneBy([
+            'userId' => $user,
+            'statusRegistered' => true
+        ]);
+
+
+
+        return $invitations;
     }
 }

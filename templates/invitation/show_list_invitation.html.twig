@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h2> Friends registered with your invitation:</h2>
+    {% for invite in invitations %}
+
+        <li> {{ invite.emailFriend }}</li>
+
+    {% endfor %}
+
+{% endblock %}
