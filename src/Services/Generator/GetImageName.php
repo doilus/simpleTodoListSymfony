@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class GetImageName
 {
-
     private string $uploadPath;
 
     public function __construct(
@@ -21,12 +20,9 @@ class GetImageName
 
     public function getImageName(UploadedFile $uploadedFile): string
     {
-
-
-        $orginalFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME); //without file extension
+        $orginalFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME); //without file extension --> zamaist path info rowniez getbasename (odciecie_extension)
 
         $newFileName = Urlizer::urlize($orginalFileName) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
-
 
         return $newFileName;
     }

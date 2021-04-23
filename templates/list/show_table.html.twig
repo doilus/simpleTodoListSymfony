@@ -46,10 +46,10 @@
                     </td>
                     <td>
                         <div class="options">
-                            <a href="{{ path('app_edit_task', { id: task.id }) }}">
+                            <a href="{{ path('task_edit', { id: task.id }) }}">
                                 <span class="fa fa-pencil-alt"></span>
                             </a>
-                            <form method="post" action="{{ path('app_delete_task', { id: task.id }) }}"
+                            <form method="post" action="{{ path('task_delete', { id: task.id }) }}"
                                onsubmit="return confirm('{{  'Czy na pewno chcesz usunąć?'|trans }}');">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit">
@@ -61,7 +61,7 @@
                 </tr>
             {% endfor %}
             </table>
-            <form class="buttonAdd"action="{{ path('app_add_task' ) }}" >
+            <form class="buttonAdd"action="{{ path('task_new' ) }}" >
                 <button class="add-task">Add new task</button>
             </form>
     </div>

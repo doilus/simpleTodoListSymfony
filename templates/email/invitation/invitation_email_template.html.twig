@@ -70,11 +70,11 @@
             <h1 class="text-center">You have been invited by {{ friendEmail }}</h1>
             <p class="block">
                 Click the link to access
-                <a href="{{ url('app_register_invitation', { token : invitation.urlRandom }) }}"> Register now </a>
+                <a href="{{ url('app_register_invitation', { token : invitation.token }) }}"> Register now </a>
                 ❤
-
-            <p>This link will expire in {{ timeLeft }} minutes </p>
             </p>
+            <p>This link will expire in {{ timeLeft }} minutes </p>
+
         </div>
     </div>
 </div>

@@ -9,7 +9,6 @@ use App\Entity\Task;
 use App\Form\Type\TaskType;
 use App\Repository\ImageRepository;
 use App\Repository\TaskRepository;
-use App\Services\Generator\AddImage;
 use App\Services\Generator\GetImageName;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,48 +19,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
-
-
-    private TaskRepository $taskRepository;
-    private GetImageName $getImageName;
-    private ImageRepository $imageRepository;
     private string $uploadPath;
 
-    /**
-     * ListController constructor.
-     * @param TaskRepository $taskRepository
-     */
+    private TaskRepository $taskRepository;
+
+    private GetImageName $getImageName;
+
+    private ImageRepository $imageRepository;
+
+
     public function __construct(
+        string $uploadPath,
         TaskRepository $taskRepository,
         GetImageName $getImageName,
-        ImageRepository $imageRepository,
-        string $uploadPath
+        ImageRepository $imageRepository
+
     )
     {
+        $this->uploadPath = $uploadPath;
         $this->taskRepository = $taskRepository;
         $this->getImageName = $getImageName;
         $this->imageRepository = $imageRepository;
-        $this->uploadPath = $uploadPath;
     }
 
     /**
-     * @Route("/", name="app_homepage", methods={"GET"})
-     */
-    public function homepage(): Response
-    {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('app_task');
-        }
-
-        return $this->render('general/homepage.html.twig');
-    }
-
-    /**
-     * @Route("/task", name="app_task", methods={"GET"})
+     * @Route("/task", name="task", methods={"GET"})
      */
     public function show(): Response
     {
-        $tasks = $this->taskRepository->findBy(['user' => $this->getUser()], ['dueDate' => 'ASC']);
+        $tasks = $this->taskRepository->findBy([
+            'user' => $this->getUser()
+        ], [
+            'dueDate' => 'ASC'
+        ]);
 
         $tasksSoon = [];
         foreach ($tasks as $task) {
@@ -74,17 +64,13 @@ class TaskController extends AbstractController
             'tasks' => $tasks,
             'taskSoon' => $tasksSoon,
         ]);
-
     }
 
     /**
-     * @Route("/task/new", name="app_add_task", methods={"GET", "POST"})
-     * @param Request $request
-     * @return Response
+     * @Route("/task/new", name="task_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
-
         $form = $this->createForm(TaskType::class);
 
         $form->handleRequest($request);
@@ -94,87 +80,79 @@ class TaskController extends AbstractController
 
             $this->taskRepository->save($task);
 
-
             /**
              * @var UploadedFile $uploadedFile
              */
             $uploadedFile = $form['imageFile']->getData();
-            $destination = $this->uploadPath . "/images_task";
-
 
             if ($uploadedFile) {
-                $newFileName = $this->getImageName->getImageName($uploadedFile, $destination);
+                $baseFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_EXTENSION);
+                $newFileName = $this->getImageName->getImageName($uploadedFile);
 
                 $image = new Image(
-                    pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),
+                    $baseFileName,
                     $newFileName,
-                    5,
-                    '\images_task',
-                    $task
+                    $this->getParameter('official_destination_task_files'),
+                    $task,
+                    $uploadedFile->getSize()
                 );
 
                 $this->imageRepository->save($image);
-
-
             }
-
 
             $this->addFlash('success', 'Task was created!');
 
-            return $this->redirectToRoute("app_task");
+            return $this->redirectToRoute("task");
         }
 
         return $this->render('list/new_form.html.twig', [
             'form' => $form->createView(),
         ]);
-
     }
 
     /**
-     * @param Task $task
-     * @param Request $request
-     * @Route("/task/{id}/edit", name="app_edit_task", methods={"GET", "POST"})
+     * @Route("/task/{id}/edit", name="task_edit", methods={"GET", "POST"})
      */
     public function edit(Task $task, Request $request): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var UploadedFile $uploadedFile
              */
             $uploadedFile = $form['imageFile']->getData();
-            $officialDestination = "/uploads/images_task";
+            $officialDestination = $this->getParameter('official_destination_task_files');
             $serverDestination = $this->uploadPath . $officialDestination;
 
-
             if ($uploadedFile) {
+                $baseFileName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFileName = $this->getImageName->getImageName($uploadedFile);
+
+                $size = $uploadedFile->getSize(); // <--- MUSI być przed move
 
                 $uploadedFile->move($serverDestination, $newFileName);
 
-                $size = filesize($serverDestination . "/" . $newFileName);
-
                 $image = new Image(
-                    pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),
+                    $baseFileName,
                     $newFileName,
                     $officialDestination,
                     $task,
                     $size
                 );
 
-
                 $this->imageRepository->save($image);
-
             }
 
             $task = $form->getData();
+
             $this->taskRepository->save($task);
 
             $this->addFlash('success', 'Task was updated!');
 
-            return $this->redirectToRoute("app_task");
+            return $this->redirectToRoute("task");
         }
 
         return $this->render('list/edit_form.html.twig', [
@@ -184,16 +162,19 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @param Task $task
-     * @param Request $request
-     * @Route("/task/{id}/delete", name="app_delete_task", methods={"DELETE"})
+     * @Route("/task/{id}/delete", name="task_delete", methods={"DELETE"})
      */
-    public function delete(Task $task): Response
+    public function delete(int $id): Response
     {
+        $task = $this->taskRepository->find($id);
+
+        if(!$task){
+            dd();
+        }
 
         $this->taskRepository->delete($task);
 
-        return $this->redirectToRoute("app_task");
+        return $this->redirectToRoute("task");
     }
 
 

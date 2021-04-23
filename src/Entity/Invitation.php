@@ -11,7 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invitation
 {
-
+    public const TIMESPAN = 15;
+    public const STATUS_NEW = false;
+    public const STATUS_ACCEPTED = true;
 
     /**
      * @ORM\Id
@@ -49,18 +51,22 @@ class Invitation
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $urlRandom;
+    private $token;
 
     public function __construct(
         User $userId,
         string $emailFriend,
-        \DateTime $sentDate
+        string $token
     )
     {
         $this->userId = $userId;
         $this->emailFriend = $emailFriend;
-        $this->sentDate = $sentDate;
+        $this->token = $token;
 
+        //others not from constructor
+        $this->sentDate = new \DateTime();
+        $this->dueDate = new \DateTime("+" . self::TIMESPAN . ' minutes');
+        $this->statusRegistered = self::STATUS_NEW;
     }
 
     public function getId(): ?int
@@ -109,12 +115,9 @@ class Invitation
         return $this->dueDate;
     }
 
-    public function setDueDate(): self
+    public function setDueDate(\DateTime $dueDate): self
     {
-        $timespan = 15;
-        $this->dueDate = new \DateTime($this->sentDate->format('Y-m-d H:i'));
-        $this->dueDate->add(new DateInterval('PT' . $timespan . 'M'));
-
+        $this->dueDate = $dueDate;
         return $this;
     }
 
@@ -130,15 +133,39 @@ class Invitation
         return $this;
     }
 
-    public function getUrlRandom(): ?string
+    public function getToken(): ?string
     {
-        return $this->urlRandom;
+        return $this->token;
     }
 
-    public function setUrlRandom(string $urlRandom): self
+    public function setToken(string $token): self
     {
-        $this->urlRandom = $urlRandom;
+        $this->token = $token;
 
         return $this;
+    }
+
+    public function containsToken(string $token): bool
+    {
+        return (bool)($this->token === $token);
+    }
+
+    public function acceptInvitation(): void
+    {
+        $this->statusRegistered = self::STATUS_ACCEPTED;
+    }
+
+    public function isValid(): bool
+    {
+        $currentDate = new \DateTime();
+
+        return(
+            $currentDate < $this->dueDate || $this->statusRegistered === self::STATUS_ACCEPTED
+        );
+    }
+
+    public function  isAccepted(): bool
+    {
+        return $this->statusRegistered === self::STATUS_ACCEPTED;
     }
 }

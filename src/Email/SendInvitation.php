@@ -12,7 +12,8 @@ class SendInvitation
 {
     private MailerInterface $mailerInterface;
 
-    public function __construct(MailerInterface $mailerInterface
+    public function __construct(
+        MailerInterface $mailerInterface
     )
     {
         $this->mailerInterface = $mailerInterface;
