@@ -31,5 +31,13 @@ class TaskRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function getCountRecords(): int{
+        $query = $this->_em->$this->createQueryBuilder();
+        $query->select('COUNT(task.id)');
+        $query->from('Task');
+
+        return $count = $query->getQuery()->getSingleScalarResult();
+    }
+
 
 }

@@ -8,6 +8,7 @@ use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,7 +32,13 @@ class TaskType extends AbstractType
                         'maxSize' => '5k'   //set size with parametres - 5 kB
                     ])
                 ]
-            ]);
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ],
+                'label' => 'Update task'
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
