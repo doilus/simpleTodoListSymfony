@@ -21,7 +21,7 @@ class WriteToCSVFile
     {
         $tasks = $this->taskRepository->findAll();
 
-        $fp = fopen("sample.csv", "w");
+        $fp = fopen("data/sample.csv", "w");
         foreach ($tasks as $task) {
             $data = [
                 $task->getId(),

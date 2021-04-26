@@ -106,7 +106,7 @@ class ImageController extends AbstractController
     }
 
     /**
-     * @Route("/image/{id}/delete", name="image_delete", methods={"GET", "POST"})
+     * @Route("/image/{id}/delete", name="image_delete", methods={"DELETE"})
      */
     public function deleteImage(int $id): Response
     {

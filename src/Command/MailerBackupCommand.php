@@ -15,17 +15,14 @@ class MailerBackupCommand extends Command
 {
     // CLI command
     protected static $defaultName = 'app:mailer:backup';
-    private TaskRepository $taskRepository;
     private SendEmail $sendEmail;
     private WriteToCSVFile $writeToCSVFile;
 
 
     public function __construct(
-        TaskRepository $taskRepository,
         SendEmail $sendEmail,
         WriteToCSVFile $writeToCSVFile)
     {
-        $this->taskRepository = $taskRepository;
         $this->sendEmail = $sendEmail;
         $this->writeToCSVFile = $writeToCSVFile;
         parent::__construct();
@@ -50,7 +47,6 @@ class MailerBackupCommand extends Command
             'domi@domi.eu',
             'Your data backup ',
             'email/welcome.html.twig',
-            [],
             "sample.csv"
         );
 
